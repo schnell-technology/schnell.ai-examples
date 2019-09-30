@@ -1,0 +1,166 @@
+{
+    "Version": "1.0",
+    "References": [{
+            "Reference": "Schnell.Ai.Actions.Classification",
+            "Version": "0.9.1"
+        },
+        {
+            "Reference": "Schnell.Ai.Artifacts.Csv",
+            "Version": "0.9.1"
+        }
+    ],
+    "Artifacts": {
+        "Models": [{
+            "Name": "model_classification",
+            "Filepath": "data\\model.zip"
+        }],
+        "DataSets": [{
+                "Name": "data_training",
+                "FieldDefinition": [{
+                        "Name": "Flower",
+                        "ValueType": "String",
+                        "FieldType": "Label"
+                    },
+                    {
+                        "Name": "SepalLength",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    },
+                    {
+                        "Name": "SepalWidth",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    },
+                    {
+                        "Name": "PetalLength",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    },
+                    {
+                        "Name": "PetalWidth",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    }
+                ],
+                "Importer": [{
+                    "Type": "Schnell.Ai.Artifacts.Csv.CsvImporter",
+                    "Configuration": {
+                        "Path": "data/train.csv"
+                    }
+                }]
+            },
+            {
+                "Name": "data_evaluate",
+                "FieldDefinition": [{
+                        "Name": "Flower",
+                        "ValueType": "String",
+                        "FieldType": "Label"
+                    },
+                    {
+                        "Name": "SepalLength",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    },
+                    {
+                        "Name": "SepalWidth",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    },
+                    {
+                        "Name": "PetalLength",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    },
+                    {
+                        "Name": "PetalWidth",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    }
+                ],
+                "Importer": [{
+                    "Type": "Schnell.Ai.Artifacts.Csv.CsvImporter",
+                    "Configuration": {
+                        "Path": "data/evaluate.csv"
+                    }
+                }]
+            },
+            {
+                "Name": "data_results",
+                "FieldDefinition": [{
+                        "Name": "SepalLength",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    },
+                    {
+                        "Name": "SepalWidth",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    },
+                    {
+                        "Name": "PetalLength",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    },
+                    {
+                        "Name": "PetalWidth",
+                        "ValueType": "Float",
+                        "FieldType": "Feature"
+                    },
+                    {
+                        "Name": "Result",
+                        "ValueType": "String",
+                        "FieldType": "Label"
+                    },
+                    {
+                        "Name": "Confidence",
+                        "ValueType": "Float",
+                        "FieldType": "Score"
+                    }
+                ],
+                "Exporter": {
+                    "Type": "Schnell.Ai.Artifacts.Csv.CsvExporter",
+                    "Configuration": {
+                        "Path": "data/result.csv"
+                    }
+                }
+            }
+        ]
+    },
+    "Actions": {
+        "Processors": [{
+                "Name": "action_evaluate",
+                "Type": "Schnell.Ai.Actions.Classification.ClassificationEvaluator",
+                "Configuration": {
+                    "Model": "model_classification",
+                    "InputData": "data_evaluate",
+                    "ResultData": "data_results"
+                }
+            },
+            {
+                "Name": "action_train",
+                "Type": "Schnell.Ai.Actions.Classification.ClassificationTrainer",
+                "Configuration": {
+                    "Model": "model_classification",
+                    "TrainingData": "data_training"
+                }
+            }
+        ]
+    },
+    "Pipelines": [{
+            "Name": "train_and_evaluate",
+            "Stages": [{
+                    "RunAction": "action_train"
+                },
+                {
+                    "RunAction": "action_evaluate"
+                }
+            ]
+        },
+        {
+            "Name": "evaluateonly",
+            "Stages": [{
+                "RunAction": "action_evaluate"
+            }]
+        }
+    ]
+}
