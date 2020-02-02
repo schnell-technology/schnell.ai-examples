@@ -1,6 +1,7 @@
 # schnell.AI Examples
 
 This repository contains examples for the schnell.AI-runtime.
+For more informations about schnell.AI please read the [documentation](https://schnell.ai/docs/#/user/project).
 
 | Directory                                  | Type                         | Description                                                        |
 |--------------------------------------------|------------------------------|--------------------------------------------------------------------|
